@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>用户信息管理页面</title>
+<link rel="stylesheet" th:href="@{/css/style.default.css}" /> 
+ <script th:src="@{/js/plugins/jquery-1.7.min.js}"></script> 
+<script th:src="@{/js/plugins/jquery-ui-1.8.16.custom.min.js}"></script>
+<script th:src="@{/js/plugins/jquery.cookie.js}"></script>
+<script th:src="@{/js/plugins/jquery.uniform.min.js}"></script>
+<script th:src="@{/js/custom/general.js}"></script> 
+<script th:inline="javascript">
+
+   var $ = jQuery;
+	//获取Id和下拉框的value
+   function selectType(foodId){   
+
+	  var data ='foodId='+foodId+'&foodType=' + $('#selectType').val();
+	   $.ajax({
+		  type: 'POST',
+		  url:'/food/deleteFoodsubmit',
+		  data: data
+		  
+		});
+ } 
+	
+	function selectName(){
+		var type = 'foodType='+$('#selectType').val();
+		$.ajax({
+			type:'POST',
+			url:'/food/deleteFoodsubmit',
+			data:type
+			
+		});
+	}
+
+</script>
+
+
+
+
+
+
+
+</head>
+
+<body class="withvernav">
+	<div class="bodywrapper">
+		<!-- 从主页面引入的头部和左侧 -->
+ 		<div th:substituteby="/admin:: #topheader_quote"></div>  
+		<div th:substituteby="/admin:: #header_quote"></div> 
+ 		<div th:substituteby="/admin:: #leftmenu_quote"></div>
+
+		<!-- 中间显示内容 -->
+		    <div class="centercontent tables">
+    
+        <div class="pageheader notab">
+            <h1 class="pagetitle">菜品列表</h1>
+            <span class="pagedesc">This is a sample description of a page</span>
+            
+        </div><!--pageheader-->
+        
+        <div id="contentwrapper" class="contentwrapper">
+               <div class="contenttitle2">
+                	<h3>删除菜品</h3>
+                </div><!--contenttitle-->
+				<!-- 分类查询 -->	
+				<div class="tableoptions">
+				<form th:action="@{/food/deleteFood}" th:method="post">
+	                    <select class="radius3" style="min-width: 5%;"name="foodType" id="selectType">
+	                    	<option th:value="'全部'" th:text="'全部'" ></option>
+	                    	<option th:value="${listType1.foodType}" th:each="listType1 : ${session.listType}" th:text="${listType1.foodType}" ("${listType1.foodType}"==[[${selectType}]])?selected="selected">汤类</option>
+	                    </select>
+	                    <script>
+	                    jQuery(function(){jQuery('#selectType').val('[[${selectType}]]');});
+	                    </script>
+	                    <input  type="submit" value="查询"/>
+	                      </form>
+                </div><!--tableoptions-->   
+        
+                  
+			<!-- 显示 -->	
+           <table cellpadding="0" cellspacing="0" border="0" id="table1" class="stdtable stdtablecb">
+			   <tr>
+				<td>菜名</td>
+				<td>种类</td>
+				<td style="width:35%">备注</td>
+				<td colspan="2">操作</td>
+			  </tr>
+			  <tr th:each="food : ${listFood}">
+				<td th:text="${food.foodName}">菜品名</td>
+				<td th:text="${food.foodType}">种类</td>
+				<td th:text="${food.foodDetail}">备注</td>
+				<td><a th:attr="id=${food.foodId}" href="" >修改</a></td>
+				 <td><a th:attr="id=${food.foodId}" href="" onclick="selectType(this.id)">删除</a></td>
+				
+			  </tr>
+			  <tr>
+			  <td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+				<td colspan="2">&nbsp;</td>
+			  </tr>
+			</table>
+                
+             
+        </div><!--contentwrapper-->
+        
+	</div><!-- centercontent -->
+
+
+	</div>
+	<!--bodywrapper-->
+
+</body>
+
+</html>
+
+
